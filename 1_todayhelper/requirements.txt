@@ -2,3 +2,5 @@ fastapi
 jinja2
 asyncio
 uvicorn
+requests
+dotenv
