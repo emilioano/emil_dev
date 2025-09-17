@@ -52,14 +52,14 @@ def terminalrun():
         if nav == 3:
             # 3 = Talk to AI
             airesult=AIprompt(forecaststring,mood,music,inputlocation)
-            print(airesult)
+            #print(airesult)
             input('Tryck Enter för att fortsätta')
             nav+=1
         
     
         if nav == 4:
             # 4 = Make a song
-            fetchsong=fetchsong(str(airesult),music,inputlocation)
+            fetchmusic=fetchsong(str(airesult),music,inputlocation)
     
     
     
