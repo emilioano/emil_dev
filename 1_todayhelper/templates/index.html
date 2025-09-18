@@ -2,7 +2,7 @@
     <html data-bs-theme='dark'>
     <head>
         <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css'>
-        <title>TodayHelper</title>
+        <title>Today Helper</title>
 
         <style>
            body {
@@ -22,7 +22,7 @@
             }
         
         </style>
-        
+
     <script>
         lat=null
         lon=null
@@ -109,7 +109,7 @@
             fetch(`/api/music?airesult=${airesult}&music=${music}&inputlocation=${inputlocation}`)
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('musicresponse').innerText = data.fetchmusic; 
+                    document.getElementById('musicresponse').innerHTML = `<A HREF='${data.fetchmusic}' TARGET='_blank' style='color:rgb(175, 255, 56);font-weight:bolder;'>Tryck här för att lyssna på genererad låt!</A> `; 
                     hideLoading();                   
                 })
                 .catch(error => {
@@ -123,19 +123,19 @@
     </head>
     <body>
 
-    <div class='form-group' style='width:50%;margin-top:150px;margin-left:auto;margin-right:auto;'>
+    <div class='form-group' style='width:75%;margin-top:150px;margin-left:auto;margin-right:auto;'>
         <!--<h1 class='mb-4' style='font-family:Courier New, Courier, monospace;font-weight:bold;'>Todayhelper</h1> -->
-        <input class='form-control' type='text' id='inputlocation' placeholder='Skriv en plats'><br><br>
-        <input class='form-control 'type='text' id='mood' placeholder='Idag känner jag mig'><br><br>
-        <input class='form-control' type='text' id='music' placeholder='Idag vill jag lyssna på'><br><br>
-        <button class='btn btn-primary' onclick='runprogram()'>Kör!</button>
+        <input class='form-control' style='background-color:black' type='text' id='inputlocation' placeholder='Skriv en plats - t.ex Hollywood, Jokkmokk, Middelfart'><br><br>
+        <input class='form-control' style='background-color:black' type='text' id='mood' placeholder='Idag känner jag mig - t.ex Glad, ölsugen, äventyrlig'><br><br>
+        <input class='form-control' style='background-color:black' type='text' id='music' placeholder='Idag vill jag lyssna på - t.ex Dansband, Black metal, Old School Hip Hop'><br><br>
+        <button class='btn btn-dark' onclick='runprogram()'>Kör!</button>
     </div>
 
     <div id='textbox' class='w-75 p-3' style='width:75%;margin-left:auto;margin-right:auto;background-color:black;font-size:large;'>
-        <p id='coordinates' style='color:rgb(102, 151, 28)'></p>
+        <p id='coordinates' style='color:rgb(95, 141, 26)'></p>
         <p id='weatherforecast' style='color:rgb(124, 184, 35)'></p>
-        <p id='airesponse' style='color:rgb(159, 235, 45)'></p>
-        <p id='musicresponse' style='color:rgb(175, 255, 56)'></p>
+        <p id='airesponse' style='color:rgb(167, 246, 47)'></p>
+        <p id='musicresponse' style='color:rgb(175, 255, 56);font-weight:bolder;'></p>
         <p id="loading" style="display:none;color:greenyellow;font-weight:bolder;"></p>
     </div>
     </body>

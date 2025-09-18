@@ -73,7 +73,8 @@ def fetchsong(airesult,music,inputlocation):
                 audio_sunoData = taskstatusdata['data']['response']['sunoData']
                 audioUrl = (audio_sunoData[0].get('audioUrl',''))
                 print(f'Låt genererad! Länk: {audioUrl}')
-                return (f'Låt genererad! Länk: {audioUrl}')
+                #returnstring = f'Låt genererad! Länk: {audioUrl}'
+                return audioUrl
             else:
                 print(f'Status är: {taskstatusdataresponse}. Vill du vänta {waittime} sekunder och kollar igen eller avsluta?')
                 quitorstay = input('Q för quit, Enter för att stanna')
@@ -81,8 +82,9 @@ def fetchsong(airesult,music,inputlocation):
                     break
                 else:
                     await asyncio.sleep(waittime)
-    asyncio.run(fetch_song(5))
-
+    
+    result=asyncio.run(fetch_song(5))
+    return result
 
 #print('Response är: ',taskstatusdata['data']['response'][0]['audioUrl']
 #print(taskstatusdata['data'][0]['audioUrl']
