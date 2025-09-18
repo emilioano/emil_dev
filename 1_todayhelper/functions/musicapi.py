@@ -73,7 +73,7 @@ def fetchsong(airesult,music,inputlocation):
                 audio_sunoData = taskstatusdata['data']['response']['sunoData']
                 audioUrl = (audio_sunoData[0].get('audioUrl',''))
                 print(f'Låt genererad! Länk: {audioUrl}')
-                break
+                return (f'Låt genererad! Länk: {audioUrl}')
             else:
                 print(f'Status är: {taskstatusdataresponse}. Vill du vänta {waittime} sekunder och kollar igen eller avsluta?')
                 quitorstay = input('Q för quit, Enter för att stanna')

@@ -73,10 +73,13 @@ def terminalrun():
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import JSONResponse
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 
 
 app = FastAPI()
 templates = Jinja2Templates(directory='templates')
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/")
 def read_root(request: Request):
@@ -97,6 +100,11 @@ def fetchforecast1(inputlocation: str,lat: str, lon: str):
 def askai1(forecaststring: str,mood: str, music: str, inputlocation: str):
     airesult=AIprompt(forecaststring,mood,music,inputlocation)
     return JSONResponse(content={'airesult': airesult})
+
+@app.get("/api/music")
+def fetchsong1(airesult: str, music: str, inputlocation: str):
+    fetchmusic=fetchsong(airesult,music,inputlocation)
+    return JSONResponse(content={'fetchmusic': fetchmusic})
 
 '''
 @app.get("api/coordinates")

@@ -20,18 +20,19 @@
                 font-size:20px;
                 font-family:'Courier New', Courier, monospace;
             }
-
+        
         </style>
         
     <script>
         lat=null
         lon=null
         forecaststring=null
+        airesult=null
 
         
         function showLoading(message) {
             const loading = document.getElementById('loading');
-            loading.innerText = message;
+            loading.innerHTML = `${message} <img src="/static/loader.gif" style='height:50px;width:38px;'></img>`;
             loading.style.display = 'block';
         }
 
@@ -88,10 +89,31 @@
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('airesponse').innerText = data.airesult; 
+                    airesult = data.airesult; 
+                    hideLoading();       
+                    fetchmusic();            
+                })
+                .catch(error => {
+                    document.getElementById('airesponse').innerText = 'Fel: ' + error;
+                    document.getElementById("loading").style.display = "none";
+                    hideLoading();
+                });
+        }
+
+
+        function fetchmusic() {
+            const music = document.getElementById('music').value;
+            const inputlocation = document.getElementById('inputlocation').value;
+            showLoading('Genererar en låt! Det kan ta några minuter!')
+
+            fetch(`/api/music?airesult=${airesult}&music=${music}&inputlocation=${inputlocation}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('musicresponse').innerText = data.fetchmusic; 
                     hideLoading();                   
                 })
                 .catch(error => {
-                    document.getElementById('weatherforecast').innerText = 'Fel: ' + error;
+                    document.getElementById('musicresponse').innerText = 'Fel: ' + error;
                     document.getElementById("loading").style.display = "none";
                     hideLoading();
                 });
@@ -109,11 +131,12 @@
         <button class='btn btn-primary' onclick='runprogram()'>Kör!</button>
     </div>
 
-    <div style='width:50%;margin-left:auto;margin-right:auto;background-color:black;font-size:large;'>
+    <div id='textbox' class='w-75 p-3' style='width:75%;margin-left:auto;margin-right:auto;background-color:black;font-size:large;'>
         <p id='coordinates' style='color:rgb(102, 151, 28)'></p>
         <p id='weatherforecast' style='color:rgb(124, 184, 35)'></p>
         <p id='airesponse' style='color:rgb(159, 235, 45)'></p>
-        <p id="loading" style="display:none;color:greenyellow;font-weight:bold;">Laddar data...</p>
+        <p id='musicresponse' style='color:rgb(175, 255, 56)'></p>
+        <p id="loading" style="display:none;color:greenyellow;font-weight:bolder;"></p>
     </div>
     </body>
 
