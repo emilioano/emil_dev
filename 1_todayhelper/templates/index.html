@@ -7,6 +7,7 @@
         <style>
            body {
                 background-color:black;
+                font-size:larger;
            }
            div {
                 color:lightgreen;
@@ -42,6 +43,16 @@
 
 
         function runprogram() {
+            document.getElementById('coordinates').innerText =  '';
+            document.getElementById('weatherforecast').innerText =  '';
+            document.getElementById('airesponse').innerText =  '';
+            document.getElementById('musicresponse').innerText =  '';
+
+
+
+
+
+
             const inputlocation = document.getElementById('inputlocation').value;
             showLoading('Laddar koordinater för platsen')
 
@@ -91,7 +102,8 @@
                     document.getElementById('airesponse').innerText = data.airesult; 
                     airesult = data.airesult; 
                     hideLoading();       
-                    fetchmusic();            
+                    document.getElementById('fetchmusic').style.display = 'block';
+                    //fetchmusic();            
                 })
                 .catch(error => {
                     document.getElementById('airesponse').innerText = 'Fel: ' + error;
@@ -101,7 +113,10 @@
         }
 
 
+
+
         function fetchmusic() {
+            document.getElementById('fetchmusic').style.display = 'none';
             const music = document.getElementById('music').value;
             const inputlocation = document.getElementById('inputlocation').value;
             showLoading('Genererar en låt! Det kan ta några minuter!')
@@ -125,7 +140,7 @@
 
     <div class='form-group' style='width:75%;margin-top:150px;margin-left:auto;margin-right:auto;'>
         <!--<h1 class='mb-4' style='font-family:Courier New, Courier, monospace;font-weight:bold;'>Todayhelper</h1> -->
-        <input class='form-control form-control-lg' style='background-color:black' type='text' id='inputlocation' placeholder='Skriv en plats - t.ex Hollywood, Jokkmokk, Middelfart'><br><br>
+        <input class='form-control form-control-lg' style='background-color:black' type='text' id='inputlocation' placeholder='Skriv en plats - t.ex Hollywood, Jokkmokk, Cape Town'><br><br>
         <input class='form-control form-control-lg' style='background-color:black' type='text' id='mood' placeholder='Idag känner jag mig - t.ex Glad, ölsugen, äventyrlig'><br><br>
         <input class='form-control form-control-lg' style='background-color:black' type='text' id='music' placeholder='Idag vill jag lyssna på - t.ex Dansband, Black metal, Old School Hip Hop'><br><br>
         <button class='btn btn-outline-success btn-lg' onclick='runprogram()'>Kör!</button>
@@ -136,7 +151,8 @@
         <p id='weatherforecast' style='color:rgb(124, 184, 35)'></p>
         <p id='airesponse' style='color:rgb(167, 246, 47)'></p>
         <p id='musicresponse' style='color:rgb(175, 255, 56);font-weight:bolder;'></p>
-        <p id="loading" style="display:none;color:greenyellow;font-weight:bolder;"></p>
+        <button id='fetchmusic' class='btn btn-outline-success btn-lg' style='display:none' onclick='fetchmusic()'>Generera en låt!</button>
+        <p id='loading' style='display:none;color:greenyellow;font-weight:bolder;'></p>
     </div>
     </body>
 

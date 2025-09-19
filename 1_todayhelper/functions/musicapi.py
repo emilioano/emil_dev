@@ -76,7 +76,8 @@ def fetchsong(airesult,music,inputlocation):
                 #returnstring = f'Låt genererad! Länk: {audioUrl}'
                 return audioUrl
             else:
-                print(f'Status är: {taskstatusdataresponse}. Vill du vänta {waittime} sekunder och kollar igen eller avsluta?')
+                print(f'Status är: {taskstatusdataresponse}. Vill du vänta {waittime} sekunder och kolla igen eller avsluta?')
+                
                 quitorstay = input('Q för quit, Enter för att stanna')
                 if quitorstay=="Q":
                     break
