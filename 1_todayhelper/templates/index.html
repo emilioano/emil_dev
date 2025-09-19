@@ -124,7 +124,13 @@
             fetch(`/api/music?airesult=${airesult}&music=${music}&inputlocation=${inputlocation}`)
                 .then(response => response.json())
                 .then(data => {
+                    if (data.fetchmusic.startsWith("http")) {
                     document.getElementById('musicresponse').innerHTML = `<A HREF='${data.fetchmusic}' TARGET='_blank' style='color:rgb(175, 255, 56);font-weight:bolder;'>Tryck här för att lyssna på genererad låt!</A> `; 
+                    }
+                    else {
+                        document.getElementById('musicresponse').innerText = data.fetchmusic; 
+                    }
+
                     hideLoading();                   
                 })
                 .catch(error => {
@@ -142,7 +148,7 @@
         <!--<h1 class='mb-4' style='font-family:Courier New, Courier, monospace;font-weight:bold;'>Todayhelper</h1> -->
         <input class='form-control form-control-lg' style='background-color:black' type='text' id='inputlocation' placeholder='Skriv en plats - t.ex Hollywood, Jokkmokk, Cape Town'><br><br>
         <input class='form-control form-control-lg' style='background-color:black' type='text' id='mood' placeholder='Idag känner jag mig - t.ex Glad, ölsugen, äventyrlig'><br><br>
-        <input class='form-control form-control-lg' style='background-color:black' type='text' id='music' placeholder='Idag vill jag lyssna på - t.ex Dansband, Black metal, Old School Hip Hop'><br><br>
+        <input class='form-control form-control-lg' style='background-color:black' type='text' id='music' placeholder='Idag vill jag lyssna på (genre) - t.ex Dansband, Black metal, Old School Hip Hop'><br><br>
         <button class='btn btn-outline-success btn-lg' onclick='runprogram()'>Kör!</button>
     </div>
 

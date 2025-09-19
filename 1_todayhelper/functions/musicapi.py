@@ -76,13 +76,15 @@ def fetchsong(airesult,music,inputlocation):
                 #returnstring = f'Låt genererad! Länk: {audioUrl}'
                 return audioUrl
             else:
-                print(f'Status är: {taskstatusdataresponse}. Vill du vänta {waittime} sekunder och kolla igen eller avsluta?')
-                
-                quitorstay = input('Q för quit, Enter för att stanna')
-                if quitorstay=="Q":
-                    break
+                if __name__ == "__main__":
+                    print(f'Status är: {taskstatusdataresponse}. Vill du vänta {waittime} sekunder och kolla igen eller avsluta?')
+                    quitorstay = input('Q för quit, Enter för att stanna')
+                    if quitorstay=="Q":
+                        break
+                    else:
+                        await asyncio.sleep(waittime)
                 else:
-                    await asyncio.sleep(waittime)
+                    return f'Status blev {taskstatusdataresponse}. Justera parametrar och prova igen.'
     
     result=asyncio.run(fetch_song(5))
     return result
