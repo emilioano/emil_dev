@@ -1,0 +1,298 @@
+    <!DOCTYPE html>
+    <html data-bs-theme='dark'>
+    <head>
+        <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css'>
+        <title>Today Helper</title>
+
+        <style>
+           body {
+                background-color:black;
+                font-size:larger;
+           }
+           div {
+                color:lightgreen;
+            }
+
+            input {
+                color:greenyellow;
+            }
+            p {
+                color:greenyellow;
+                font-size:20px;
+                font-family:'Courier New', Courier, monospace;
+            }
+            a {
+                color:lightgreen;
+                font-style: normal;
+                text-decoration:none;
+            }
+        </style>
+
+    <script>
+
+    language='SE';
+
+    window.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("LanguageToggler").addEventListener("change", function() {
+    const isEnglish = this.checked;
+  
+    
+    if (isEnglish) {
+        document.getElementById("LocationBox").innerHTML = `<input class='form-control form-control-lg' style='background-color:black' type='text' id='inputlocation' placeholder='Enter a location - for example Hollywood, Jokkmokk, Cape Town'>`
+        document.getElementById("MoodBox").innerHTML = `<input class='form-control form-control-lg' style='background-color:black' type='text' id='mood' placeholder='Today I am feeling - for example Happy, beer-craving, adventurous'>`
+        document.getElementById("MusicPreferenceBox").innerHTML = `<input class='form-control form-control-lg' style='background-color:black' type='text' id='music' placeholder='I want to listen to (genre) - for example Dansband, Black metal, Old School Hip Hop'>`
+        document.getElementById("GoButton").innerHTML = `<button class='btn btn-outline-success btn-lg' onclick='runprogram()'>Go!</button>`
+        document.getElementById("GenerateButton").innerHTML = `<button id='fetchmusic' class='btn btn-outline-success btn-lg' style='display:none' onclick='fetchmusic()'>Generate a track!</button>`
+        language='ENG';
+        }
+        else {
+        document.getElementById("LocationBox").innerHTML = `<input class='form-control form-control-lg' style='background-color:black' type='text' id='inputlocation' placeholder='Skriv en plats - t.ex Hollywood, Jokkmokk, Cape Town'>`
+        document.getElementById("MoodBox").innerHTML = `<input class='form-control form-control-lg' style='background-color:black' type='text' id='mood' placeholder='Idag känner jag mig - t.ex Glad, ölsugen, äventyrlig'>`
+        document.getElementById("MusicPreferenceBox").innerHTML = `<input class='form-control form-control-lg' style='background-color:black' type='text' id='music' placeholder='Idag vill jag lyssna på (genre) - t.ex Dansband, Black metal, Old School Hip Hop'>`
+        document.getElementById("GoButton").innerHTML = `<button class='btn btn-outline-success btn-lg' onclick=runprogram();'>Kör!</button>`
+        document.getElementById("GenerateButton").innerHTML = `<button id='fetchmusic' class='btn btn-outline-success btn-lg' style='display:none' onclick='fetchmusic()'>Generera en låt!</button>`
+        language='SE'
+    }
+    document.getElementById("description").innerText = isEnglish
+      ? "This is the English version of the page."
+      : "Det här är den svenska versionen av sidan.";
+    });
+});
+    
+
+
+        lat=null
+        lon=null
+        forecaststring=null
+        airesult=null
+        ip=null
+
+        fetch('https://api.ipify.org?format=json')
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("ip-display").innerText = data.ip;
+        ip=data.ip;
+      });
+
+
+        
+        function showLoading(message) {
+            const loading = document.getElementById('loading');
+            loading.innerHTML = `${message} <img src="/static/loader.gif" style='height:50px;width:38px;'></img>`;
+            loading.style.display = 'block';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+
+        function runprogram() {
+            document.getElementById('coordinates').innerText =  '';
+            document.getElementById('weatherforecast').innerText =  '';
+            document.getElementById('airesponse').innerText =  '';
+            document.getElementById('musicresponse').innerText =  '';
+
+
+
+
+
+            
+            const inputlocation = document.getElementById('inputlocation').value;
+            if (language=='SE') {
+            showLoading('Laddar koordinater för platsen')
+            }
+            else {
+            showLoading('Fetching the coordinates for location')  
+            }
+
+
+            fetch(`/api/fetchcoordinates?inputlocation=${inputlocation}&language=${language}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('coordinates').innerText =  data.coordinatesstring;
+                    lat = data.lat;
+                    lon = data.lon;
+                    hideLoading();
+                    fetchweather() 
+                })
+                .catch(error => {
+                    document.getElementById('coordinates').innerText = 'Fel: ' + error;
+                    hideLoading();
+                });
+        }
+
+        function fetchweather() {
+            if (language=='SE') {
+            showLoading('Laddar väderprognos')
+            }
+            else {
+                showLoading('Loading weather forecast')
+            }
+            const inputlocation = document.getElementById('inputlocation').value;
+
+            fetch(`/api/fetchforecast?inputlocation=${inputlocation}&lat=${lat}&lon=${lon}&language=${language}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('weatherforecast').innerText =  data.forecaststring;
+                    forecaststring = data.forecaststring;  
+                    hideLoading();
+                    airesponse();               
+                })
+                .catch(error => {
+                    document.getElementById('weatherforecast').innerText = 'Fel: ' + error;
+                    document.getElementById("loading").style.display = "none";
+                });
+        }
+
+        function airesponse() {
+            if (language=='SE') {
+            showLoading('Laddar AI-svar')
+            }
+            else {
+            showLoading('Loading AI response')    
+            }
+            const mood = document.getElementById('mood').value;
+            const music = document.getElementById('music').value;
+            const inputlocation = document.getElementById('inputlocation').value;
+    
+
+            fetch(`/api/askai?forecaststring=${forecaststring}&mood=${mood}&music=${music}&inputlocation=${inputlocation}&language=${language}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('airesponse').innerText = data.airesult; 
+                    airesult = data.airesult; 
+                    hideLoading();       
+                    document.getElementById('fetchmusic').style.display = 'block';
+                    //fetchmusic();            
+                })
+                .catch(error => {
+                    document.getElementById('airesponse').innerText = 'Fel: ' + error;
+                    document.getElementById("loading").style.display = "none";
+                    hideLoading();
+                });
+        }
+
+
+
+
+        function fetchmusic() {
+            document.getElementById('fetchmusic').style.display = 'none';
+            const music = document.getElementById('music').value;
+            const inputlocation = document.getElementById('inputlocation').value;
+            const mood = document.getElementById('mood').value;
+            if (language=='SE') {
+            showLoading('Genererar en låt! Det kan ta några minuter!')
+            }
+            else {
+            showLoading('Generating a music track, this might take some minutes!')  
+            }
+
+
+            fetch('/api/music', {
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+            airesult:airesult,
+            music:music,
+            inputlocation:inputlocation,
+            mood:mood,
+            ip:ip
+            })
+        })
+            //fetch(`/api/music?airesult=${airesult}&music=${music}&inputlocation=${inputlocation}&mood=${mood}&ip=${ip}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.fetchmusic.startsWith("http")) {
+                        if (language=='SE') {
+                    document.getElementById('musicresponse').innerHTML = `<A HREF='${data.fetchmusic}' TARGET='_blank' style='color:rgb(175, 255, 56);font-weight:bolder;'>Tryck här för att lyssna på genererad låt!</A>`; 
+                    }
+                    else {
+                    document.getElementById('musicresponse').innerHTML = `<A HREF='${data.fetchmusic}' TARGET='_blank' style='color:rgb(175, 255, 56);font-weight:bolder;'>Click here to listen to the generated track!</A>`; 
+                    }
+                    }
+
+
+                    else {
+                        document.getElementById('musicresponse').innerText = data.fetchmusic; 
+                    }
+
+                    hideLoading();                   
+                })
+                .catch(error => {
+                    document.getElementById('musicresponse').innerText = 'Fel: ' + error;
+                    document.getElementById("loading").style.display = "none";
+                    hideLoading();
+                });
+        }
+
+
+
+
+
+
+
+
+    </script>
+
+    </head>
+    <body>
+
+    <table width='30%' cellpadding='5' cellspacing='0'><tr><td>
+    <!--<div style='height:0%;width:100%;margin-top:10px;margin-left:auto;'>-->
+    <!--<p id='ip-display' style='color:rgb(95, 141, 26)'></p>-->
+    <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" role="switch" id="LanguageToggler">
+        <label class="form-check-label" for="LanguageToggler">Swe/Eng switch</label>
+      </div>    
+      <a href='/requests'>List requests</a>
+      <!--</div>-->
+    </div>
+    </td>
+<td></td>
+
+</tr>
+    </table>
+
+    <div class='form-group' style='width:75%;margin-top:150px;margin-left:auto;margin-right:auto;'>
+        <p id='LocationBox'><input class='form-control form-control-lg' style='background-color:black' type='text' id='inputlocation' placeholder='Skriv en plats - t.ex Hollywood, Jokkmokk, Cape Town'></p><br><br>
+        <p id='MoodBox'><input class='form-control form-control-lg' style='background-color:black' type='text' id='mood' placeholder='Idag känner jag mig - t.ex Glad, ölsugen, äventyrlig'></p><br><br>
+        <p id='MusicPreferenceBox'><input class='form-control form-control-lg' style='background-color:black' type='text' id='music' placeholder='Idag vill jag lyssna på (genre) - t.ex Dansband, Black metal, Old School Hip Hop'></p><br><br>
+        <p id='GoButton'><button class='btn btn-outline-success btn-lg' onclick='runprogram()'>Kör!</button></p>
+    </div>
+
+    <div id='textbox' class='w-75 p-3' style='width:75%;margin-left:auto;margin-right:auto;background-color:black;font-size:large;'>
+        <p id='coordinates' style='color:rgb(95, 141, 26)'></p>
+        <p id='weatherforecast' style='color:rgb(124, 184, 35)'></p>
+        <p id='airesponse' style='color:rgb(167, 246, 47)'></p>
+        <p id='musicresponse' style='color:rgb(175, 255, 56);font-weight:bolder;'></p>
+        <p id='GenerateButton'><button id='fetchmusic' class='btn btn-outline-success btn-lg' style='display:none' onclick='fetchmusic()'>Generera en låt!</button></p>
+        <p id='loading' style='display:none;color:greenyellow;font-weight:bolder;'></p>
+    </div>
+
+
+
+<!--<script>
+document.getElementById("flexSwitchCheckDefault").addEventListener("change", function() {
+    const isEnglish = this.checked;
+  
+    
+    if (isEnglish) {
+        document.getElementById("inputlocationnew").innerHTML = `<input class='form-control form-control-lg' style='background-color:black' type='text' id='inputlocation' placeholder='Enter a location - for example Hollywood, Jokkmokk, Cape Town'>`
+
+    }
+    else {
+        document.getElementById("inputlocationnew").innerHTML = `<input class='form-control form-control-lg' style='background-color:black' type='text' id='inputlocation' placeholder='Skriv en plats - t.ex Hollywood, Jokkmokk, Cape Town'>`
+    }
+    document.getElementById("description").innerText = isEnglish
+      ? "This is the English version of the page."
+      : "Det här är den svenska versionen av sidan.";
+});
+</script>-->
+
+    </body>
+
+
+    
