@@ -17,7 +17,7 @@ def AIprompt(forecaststring,mood,music,inputlocation,language):
     print('Prompt till AI: ',askprompt)
     print('----------------------------------------------------------------------------------\nLaddar...')
     gemini_api_key = os.getenv('gemini_api_key')
-    ai_endpoint = f'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key={gemini_api_key}'
+    ai_endpoint = f'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key={gemini_api_key}'
     headers = {
         "Content-Type": "application/json"
     }
