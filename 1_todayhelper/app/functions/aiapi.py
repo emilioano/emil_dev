@@ -10,9 +10,9 @@ load_dotenv()
 def AIprompt(forecaststring,mood,music,inputlocation,language):
 
     if language == 'SE':
-        askprompt = f'Vädret idag är följande: {forecaststring}. Jag känner mig {mood}. Jag vill lyssna på {music}. Ge mig råd för vad jag bäst kan hitta på i {inputlocation} och hur jag baserat på allt sammantaget kan hantera dagen på ett optimalt sätt, och ge mig förslag på lämplig klädsel. Ge mig tre relevanta affirmationer baserat på tidigare data som hjälper mig ta mig genom dagen. VIKTIGT: SVARET DU GER FÅR INTE ÖVERSTIGA 3000 TECKEN.'
+        askprompt = f'Vädret idag är följande: {forecaststring}. Jag känner mig {mood}. Jag vill lyssna på {music}. Ge mig råd för vad jag bäst kan hitta på i {inputlocation} och hur jag baserat på allt sammantaget kan hantera dagen på ett optimalt sätt, och ge mig förslag på lämplig klädsel. Ge mig tre relevanta affirmationer baserat på tidigare data som hjälper mig ta mig genom dagen. VIKTIGT: SVARET DU GER FÅR INTE ÖVERSTIGA 2900 TECKEN.'
     else:
-        askprompt = f'The weather today is as following: {forecaststring}. This is my mood: {mood}. I want tro listen to {music}. Please give me advice what is the best activities for me in {inputlocation} and how I can optimize my day based on this. Give me recommendations on how to dress according to the weather. Give me three affirmations based on all data that helps me get through the day. IMPORTANT: THE ANSWER YOU GIVE CAN NOT EXCEED 3000 CHARACTERS.'
+        askprompt = f'The weather today is as following: {forecaststring}. This is my mood: {mood}. I want tro listen to {music}. Please give me advice what is the best activities for me in {inputlocation} and how I can optimize my day based on this. Give me recommendations on how to dress according to the weather. Give me three affirmations based on all data that helps me get through the day. IMPORTANT: THE ANSWER YOU GIVE CAN NOT EXCEED 2900 CHARACTERS.'
 
     print('Prompt till AI: ',askprompt)
     print('----------------------------------------------------------------------------------\nLaddar...')
