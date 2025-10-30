@@ -1,0 +1,74 @@
+    <!DOCTYPE html>
+    <html data-bs-theme='dark'>
+    <head>
+        <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css'>
+        <title>Today Helper - Requests</title>
+
+        <style>
+           body {
+                background-color:black;
+                font-size:larger;
+           }
+           tr {
+                color:lightgreen;
+                font-family:'Courier New', Courier, monospace;
+            }
+
+            input {
+                color:greenyellow;
+            }
+            p {
+                color:greenyellow;
+                font-size:20px;
+                font-family:'Courier New', Courier, monospace;
+            }
+            td {
+             border: 1px;border-style: dotted;border-color:green;
+             margin:50px;
+            }
+        </style>
+
+       
+    </head>
+    <body>
+
+    
+<div class='form-group' style='width:90%;margin-top:150px;margin-left:auto;margin-right:auto;'>
+ <table width='100%'>
+     <tr style='color:green'>
+         <td>Time</td>
+         <td>IP</td>
+         <td>Entered location</td>
+         <td>Mood</td>
+         <td>Genre</td>
+         <td>AI-response</td>
+         <td>Music url</td>
+     </tr>
+     {% for row in records %}
+     <tr>
+        <td>{{ row[1] }}</td>
+        <td>{{ row[2] }}</td>
+        <td>{{ row[3] }}</td>
+        <td>{{ row[4] }}</td>
+        <td>{{ row[5] }}</td>
+        <td>
+            <span onclick='alert( {{ row[6]|tojson }} )' style='cursor:pointer;'>
+                {{ row[6][:50] }}{% if row[6]|length > 50 %}...{% endif %}
+            </span> 
+        </td>
+        <!--<td>{{ row[6] }}...</td>-->
+
+        <td><a href='{{ row[7] }}' style='color:green;font-weight:bolder;'>Link!</a></td>
+        
+     </tr>
+     {% endfor %}
+ </table>
+</div>
+
+
+
+    </div>
+    </body>
+
+
+    
